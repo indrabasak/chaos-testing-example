@@ -1,0 +1,11 @@
+provider "aws" {
+  profile = "default"
+  alias = "primary"
+  region  = "{{ aws_region }}"
+}
+
+provider "aws" {
+  profile = "default"
+  alias = "secondary"
+  region  = "{{ aws_region_secondary }}"
+}

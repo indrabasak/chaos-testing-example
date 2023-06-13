@@ -1,0 +1,9 @@
+{
+  "name": "chaos-testing-example",
+  "version": "1.0.0",
+  "description": "A simple example of chaos testing in AWS",
+  "main": "index.js",
+  "repository": "https://github.com/indrabasak/chaos-testing-example.git",
+  "author": "indra.basak1@gmail.com",
+  "license": "MIT"
+}
