@@ -7,8 +7,8 @@ data "aws_iam_policy_document" "s3_backend_write" {
   policy_id = "s3-backend-write-${var.bucket}"
 
   statement {
-    effect  = "Deny"
-    actions = ["s3:*"]
+    effect    = "Deny"
+    actions   = ["s3:*"]
     resources = ["arn:aws:s3:::${var.bucket}"]
 
     principals {
