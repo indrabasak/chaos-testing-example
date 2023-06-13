@@ -7,7 +7,7 @@ TARGET_REGION="us-west-2"
 TARGET_ENVIRONMENT="sbx"
 BUCKET_NAME="sbx-chaos-testing-example-state-us-west-2"
 
-terraformInit() {
+terraformDeploy() {
   echo "terraformInit - 1"
 
   terraform init
@@ -35,7 +35,5 @@ terraformInit() {
   fi
 }
 
-terraformDeploy() {
-}
 
-terraformInit
+terraformDeploy
