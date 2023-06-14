@@ -71,4 +71,16 @@ data "aws_api_gateway_export" "rest_api_gateway_export" {
   export_type = "oas30"
 }
 
+resource "aws_ssm_parameter" "ssm_parameter_rest_api_id" {
+  name        = "/chaos-testing-example/rest_api_id"
+  description = "Chaos Testing API Gateway REST API ID"
+  type        = "String"
+  value       = aws_api_gateway_stage.rest_api_stage.rest_api_id
+}
 
+resource "aws_ssm_parameter" "ssm_parameter_rest_api_root_resource_id" {
+  name        = "/chaos-testing-example/root_resource_id"
+  description = "Chaos Testing API Gateway Root Resource API ID"
+  type        = "String"
+  value       = aws_api_gateway_rest_api.rest_api.root_resource_id
+}

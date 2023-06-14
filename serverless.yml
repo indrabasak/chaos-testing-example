@@ -25,12 +25,8 @@ provider:
   region: ${opt:region, 'us-east-1'}
   cfnRole: arn:aws:iam::${aws:accountId}:role/AdskCfnAdministratorAccessExecutionRole
   apiGateway:
-#    restApiId:
-#      Fn::ImportValue: rest_api_id
-    restApiId: x342c01s6f
-    restApiRootResourceId: howfipvqc2
-#    restApiRootResourceId:
-#      Fn::ImportValue: rest_api_root_resource_id
+    restApiId: ${ssm:/chaos-testing-example/rest_api_id}
+    restApiRootResourceId: ${ssm:/chaos-testing-example/root_resource_id}
     description: "Chaos testing example health"
 
 package:
