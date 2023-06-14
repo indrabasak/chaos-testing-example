@@ -1,0 +1,64 @@
+service: chaos-testing-example
+frameworkVersion: '3'
+
+useDotenv: true
+
+custom:
+  baseAppName: chaos-example
+  config: ${file(environments/${self:provider.region}/${opt:stage, self:provider.stage, 'dev'}.yml)}
+  deploymentBucket:
+    name: '${self:service}-deployments-${self:provider.region}-${aws:accountId}'
+    policy: { "Version": "2008-10-17", "Statement": [{"Effect": "Deny","Principal": "*","Action": "s3:*","Resource": ["arn:aws:s3:::${self:service}-deployments-${aws:region}-${aws:accountId}/*","arn:aws:s3:::${self:service}-deployments-${aws:region}-${aws:accountId}"],"Condition": {"Bool": {"aws:SecureTransport": "false"}}}]}
+    blockPublicAccess: true
+    skipPolicySetup: false
+    versioning: true
+    tags:
+      - Key: STAGE
+        Value: ${opt:stage, 'sbx'}
+      - Key: 'adsk:moniker'
+        Value: ${self:custom.config.moniker}
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'sbx'}
+  region: ${opt:region, 'us-east-1'}
+  cfnRole: arn:aws:iam::${aws:accountId}:role/AdskCfnAdministratorAccessExecutionRole
+  apiGateway:
+#    restApiId:
+#      Fn::ImportValue: rest_api_id
+    restApiId: x342c01s6f
+    restApiRootResourceId: howfipvqc2
+#    restApiRootResourceId:
+#      Fn::ImportValue: rest_api_root_resource_id
+    description: "Chaos testing example health"
+
+package:
+  individually: true
+  exclude:
+    - ./**
+    - '!node_modules/**'
+
+functions:
+  health:
+      name: ${self:service}-health
+      handler: src/health/index.handler
+      role: HealthLambdaRole
+      package:
+        include:
+          - src/common/**
+          - src/health/**
+      memorySize: 512
+      timeout: 300
+      reservedConcurrency: ${self:custom.config.lambda-health-reservedConcurrency}
+      events:
+        - http:
+            path: 'v1/health'
+            method: GET
+            cors: true
+
+resources:
+  - ${file(resources/role-health-lambda.yml)}
+
+plugins:
+  - serverless-deployment-bucket

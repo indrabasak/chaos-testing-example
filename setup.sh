@@ -46,5 +46,5 @@ terraformDestroy() {
   terraform destroy -auto-approve -lock=true -var "key=${BASE_NAME}/terraform.tfstate" -var-file=./environments/${TARGET_REGION}/${TARGET_ENVIRONMENT}.tfvars
 }
 
-#terraformDeploy
-terraformDestroy
+terraformDeploy
+#terraformDestroy
