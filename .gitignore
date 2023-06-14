@@ -134,3 +134,4 @@ dist
 /terraform.tfstate
 /terraform.tfstate.backup
 /out.plan
+/yarn.lock
