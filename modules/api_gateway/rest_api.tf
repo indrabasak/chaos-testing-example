@@ -64,12 +64,11 @@ resource "aws_api_gateway_stage" "rest_api_stage" {
   stage_name    = var.rest_api_stage_name
 }
 
-data "aws_api_gateway_export" "rest_api_gateway_export" {
-  rest_api_id = aws_api_gateway_stage.rest_api_stage.rest_api_id
-  stage_name  = aws_api_gateway_stage.rest_api_stage.stage_name
-#  rest_api_root_resource_id = aws_api_gateway_rest_api.rest_api.root_resource_id
-  export_type = "oas30"
-}
+#data "aws_api_gateway_export" "rest_api_gateway_export" {
+#  rest_api_id = aws_api_gateway_stage.rest_api_stage.rest_api_id
+#  stage_name  = aws_api_gateway_stage.rest_api_stage.stage_name
+#  export_type = "oas30"
+#}
 
 resource "aws_ssm_parameter" "ssm_parameter_rest_api_id" {
   name        = "/chaos-testing-example/rest_api_id"

@@ -17,6 +17,10 @@ custom:
         Value: ${opt:stage, 'sbx'}
       - Key: 'adsk:moniker'
         Value: ${self:custom.config.moniker}
+  localstack:
+    stages:
+      - local
+    debug: true
 
 provider:
   name: aws
@@ -76,3 +80,4 @@ resources:
 
 plugins:
   - serverless-deployment-bucket
+  - serverless-localstack
