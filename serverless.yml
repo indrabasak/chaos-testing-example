@@ -53,8 +53,26 @@ functions:
             method: GET
             cors: true
 
+  hello:
+      name: ${self:service}-hello
+      handler: src/hello/index.handler
+      role: HelloLambdaRole
+      package:
+        include:
+          - src/common/**
+          - src/hello/**
+      memorySize: 512
+      timeout: 300
+      reservedConcurrency: ${self:custom.config.lambda-hello-reservedConcurrency}
+      events:
+        - http:
+            path: 'v1/hello'
+            method: GET
+            cors: true
+
 resources:
   - ${file(resources/role-health-lambda.yml)}
+  - ${file(resources/role-hello-lambda.yml)}
 
 plugins:
   - serverless-deployment-bucket
