@@ -1,7 +1,7 @@
 @lambda-outage-by-region
 Feature: Lambda Outage by Region Chaos Testing
   As a user
-  I want to test the resiliency of my example application by injecting chaos.
+  I want to test the resiliency of my application by injecting lambda outage in a region.
 
   Scenario Outline: test resiliency by injecting chaos to all lambdas in a region
     Given localstack setup is up and running for testing lambdas chaos in a region

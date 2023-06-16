@@ -1,5 +1,5 @@
 class TemplateBuilder {
-  static createTemplate(serviceName) {
+  static createTemplate(regionName, serviceName) {
     return {
       actions: {
         'lambda all operation': {
@@ -9,11 +9,11 @@ class TemplateBuilder {
             percentage: '100',
             exception: 'exception, terrible error in lambda',
             errorCode: '500',
-            region: 'us-west-2'
+            region: regionName
           }
         }
       },
-      description: 'terrible error in lambda - 1',
+      description: `terrible error in ${serviceName}`,
       stopConditions: [
         {
           source: 'none'

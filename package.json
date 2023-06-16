@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/  --parallel 1; node chaos-test/template/report.js",
-    "chaos-test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/ --tags '@chaos-test' && node chaos-test/template/report.js",
+    "apigateway-test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/ --tags '@apigateway-outage-by-region'; node chaos-test/template/report.js",
     "report": "node chaos-test/template/report.js",
     "lint": "./node_modules/.bin/eslint ./src ./*.js -f table"
   },

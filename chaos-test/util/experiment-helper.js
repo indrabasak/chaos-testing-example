@@ -20,7 +20,7 @@ class ExperimentHelper {
 
   async startExperiment(service) {
     try {
-      const params = TemplateBuilder.createTemplate(service);
+      const params = TemplateBuilder.createTemplate(this.region, service);
       const command = new CreateExperimentTemplateCommand(params);
       const data = await this.client.send(command);
       this.experimentTemplateId = data.experimentTemplate.id;
@@ -40,17 +40,25 @@ class ExperimentHelper {
 
   async stopExperiment() {
     if (this.experimentId) {
-      const stopCmd = new StopExperimentCommand({ id: this.experimentId });
-      const stopRsp = await this.client.send(stopCmd);
-      console.log(stopRsp);
+      try {
+        const stopCmd = new StopExperimentCommand({ id: this.experimentId });
+        const stopRsp = await this.client.send(stopCmd);
+        console.log(stopRsp);
+      } catch (e) {
+        console.debug(e);
+      }
     }
 
     if (this.experimentTemplateId) {
-      const deleteCmd = new DeleteExperimentTemplateCommand({
-        id: this.experimentTemplateId
-      });
-      const deleteRsp = await this.client.send(deleteCmd);
-      console.log(deleteRsp);
+      try {
+        const deleteCmd = new DeleteExperimentTemplateCommand({
+          id: this.experimentTemplateId
+        });
+        const deleteRsp = await this.client.send(deleteCmd);
+        console.log(deleteRsp);
+      } catch (e) {
+        console.debug(e);
+      }
     }
   }
 }
