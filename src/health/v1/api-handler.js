@@ -6,8 +6,6 @@
  */
 const logger = require('../../common/lambda-logger');
 
-let health = null;
-
 // eslint-disable-next-line no-unused-vars
 exports.getHealth = async (req, res) => {
   logger.info('Calling health endpoint');
