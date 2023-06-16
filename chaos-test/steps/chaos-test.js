@@ -8,7 +8,7 @@
 const {
   FisClient,
   CreateExperimentTemplateCommand,
-  StartExperimentCommand
+  StartExperimentCommand, StopExperimentCommand, DeleteExperimentTemplateCommand
 } = require('@aws-sdk/client-fis');
 const { Given, Then, When, After } = require('@cucumber/cucumber');
 const assert = require('assert').strict;
@@ -73,6 +73,7 @@ When('I inject lambda outage by region fault', async () => {
     console.log('2 ------------------------');
     this.startResponse = await client.send(startCmd);
     console.log(this.startResponse);
+    this.experimentId = this.startResponse.experiment.id;
   } catch (e) {
     console.log(e);
   }
@@ -101,4 +102,16 @@ Then(
 After(async () => {
   console.log('$$$$$$$$$$$$$$$$$$$$$$ Cleaning up experiments');
   console.log(this.startResponse);
+
+  if (this.experimentId) {
+    const stopCmd = new StopExperimentCommand({id: this.experimentId});
+    const stopRsp = await client.send(stopCmd);
+    console.log(stopRsp);
+  }
+
+  if (this.experimentTemplateId) {
+    const deleteCmd = new DeleteExperimentTemplateCommand({id: this.experimentTemplateId});
+    const deleteRsp = await client.send(deleteCmd);
+    console.log(deleteRsp);
+  }
 });

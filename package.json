@@ -7,7 +7,7 @@
   "author": "indra.basak1@gmail.com",
   "license": "MIT",
   "scripts": {
-    "test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/ --parallel 3 && node ./report.js",
+    "test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/  --parallel 1; node ./report.js",
     "chaos-test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/ --tags '@chaos-test' && node ./report.js",
     "report": "node ./report.js",
     "lint": "./node_modules/.bin/eslint ./src ./*.js -f table"
