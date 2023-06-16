@@ -36,28 +36,31 @@ Given(
   }
 );
 
-When('request to {} gets a response code of {int}', async (path, code) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+When(
+  'check lambda by sending a request to {} gets a response code of {int}',
+  async (path, code) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
 
-  const response = await RestHelper.get(
-    `${process.env.BASE_URL}${path}`,
-    config
-  );
-  assert.equal(response.status, code);
-  console.log('END - health endpoint response successful');
-});
+    const response = await RestHelper.get(
+      `${process.env.BASE_URL}${path}`,
+      config
+    );
+    assert.equal(response.status, code);
+    console.log('END - health endpoint response successful');
+  }
+);
 
-When('I inject fault', async () => {
+When('I inject lambda fault', async () => {
   console.log('1 ------------------------');
   await helper.startExperiment('lambda');
 });
 
 Then(
-  'send a GET request to {} and I should get a response code of {int}',
+  'I send a GET request to {} and I should get a response code of {int}',
   { timeout: 50 * 1000 },
   async (path, code) => {
     const config = {
@@ -77,7 +80,7 @@ Then(
 );
 
 Then(
-  'resend a GET request to {} and I should get a response code of {int}',
+  'check lambda by resending a GET request to {} and I should get a response code of {int}',
   { timeout: 50 * 1000 },
   async (path, code) => {
     const config = {
