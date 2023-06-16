@@ -135,3 +135,6 @@ dist
 /terraform.tfstate.backup
 /out.plan
 /yarn.lock
+/volume/
+/test-reports/cucumber_report.html
+/cucumber.json

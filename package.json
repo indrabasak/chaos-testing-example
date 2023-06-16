@@ -6,6 +6,12 @@
   "repository": "https://github.com/indrabasak/chaos-testing-example.git",
   "author": "indra.basak1@gmail.com",
   "license": "MIT",
+  "scripts": {
+    "test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/ --parallel 3 && node ./report.js",
+    "chaos-test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/ --tags '@chaos-test' && node ./report.js",
+    "report": "node ./report.js",
+    "lint": "./node_modules/.bin/eslint ./src ./*.js -f table"
+  },
   "devDependencies": {
     "eslint": "^8.32.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -21,8 +27,15 @@
     "prettier": "2.5.1"
   },
   "dependencies": {
-    "aws-sdk": "^2.1304.0",
+    "@aws-sdk/client-fis": "^3.352.0",
+    "@cucumber/cucumber": "^9.1.2",
+    "aws-sdk": "^2.1397.0",
+    "axios": "^1.4.0",
+    "cucumber-html-reporter": "^7.1.0",
+    "dotenv-flow": "^3.2.0",
+    "fs": "^0.0.1-security",
     "lambda-api": "^0.12.0",
+    "qs": "^6.11.2",
     "serverless-deployment-bucket": "^1.6.0",
     "serverless-localstack": "^1.1.1",
     "uuid": "^9.0.0",
