@@ -4,24 +4,16 @@
  * @author Indra Basak
  * @since Jun 14, 2023
  */
-// eslint-disable-next-line import/no-extraneous-dependencies
-const {
-  FisClient,
-  CreateExperimentTemplateCommand,
-  StartExperimentCommand,
-  StopExperimentCommand,
-  DeleteExperimentTemplateCommand
-} = require('@aws-sdk/client-fis');
 const { Given, Then, When, After } = require('@cucumber/cucumber');
 const assert = require('assert').strict;
 require('dotenv-flow').config();
+const { ExperimentHelper } = require('../util/experiment-helper');
 const { RestHelper } = require('../util/rest-helper');
-const { TemplateBuilder } = require('../util/template-builder');
 
-const client = new FisClient({
-  endpoint: 'http://localhost:4566',
-  region: 'us-west-2'
-});
+const helper = new ExperimentHelper(
+  process.env.LOCALSTACK_URL,
+  process.env.AWS_REGION
+);
 
 /// ////////////////////////////////////////////////////////////////////////////////
 // Scenario Outline: test resiliency by injecting chaos to all lambdas in a region
@@ -61,24 +53,7 @@ When('request to {} gets a response code of {int}', async (path, code) => {
 
 When('I inject fault', async () => {
   console.log('1 ------------------------');
-
-  try {
-    const params = TemplateBuilder.createTemplate('lambda');
-    const command = new CreateExperimentTemplateCommand(params);
-    const data = await client.send(command);
-    this.experimentTemplateId = data.experimentTemplate.id;
-    console.log(data);
-
-    const startCmd = new StartExperimentCommand({
-      experimentTemplateId: this.experimentTemplateId
-    });
-    console.log('2 ------------------------');
-    this.startResponse = await client.send(startCmd);
-    console.log(this.startResponse);
-    this.experimentId = this.startResponse.experiment.id;
-  } catch (e) {
-    console.log(e);
-  }
+  await helper.startExperiment('lambda');
 });
 
 Then(
@@ -122,20 +97,6 @@ Then(
 );
 
 After(async () => {
-  console.log('$$$$$$$$$$$$$$$$$$$$$$ Cleaning up experiments');
-  console.log(this.startResponse);
-
-  if (this.experimentId) {
-    const stopCmd = new StopExperimentCommand({ id: this.experimentId });
-    const stopRsp = await client.send(stopCmd);
-    console.log(stopRsp);
-  }
-
-  if (this.experimentTemplateId) {
-    const deleteCmd = new DeleteExperimentTemplateCommand({
-      id: this.experimentTemplateId
-    });
-    const deleteRsp = await client.send(deleteCmd);
-    console.log(deleteRsp);
-  }
+  console.log('Cleaning up experiments');
+  await helper.stopExperiment();
 });
