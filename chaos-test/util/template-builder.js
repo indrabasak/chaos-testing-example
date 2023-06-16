@@ -1,3 +1,10 @@
+/**
+ * A helper to build experiment templates.
+ *
+ * @author Indra Basak
+ * @since Jun 15, 2023
+ */
+
 class TemplateBuilder {
   static createTemplate(regionName, serviceName) {
     return {

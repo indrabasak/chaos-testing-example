@@ -1,9 +1,17 @@
+/**
+ * A helper class to run fault experiments.
+ *
+ * @author Indra Basak
+ * @since Jun 15, 2023
+ */
+
 const {
   FisClient,
   CreateExperimentTemplateCommand,
   StartExperimentCommand,
   StopExperimentCommand,
   DeleteExperimentTemplateCommand
+  // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('@aws-sdk/client-fis');
 const { TemplateBuilder } = require('./template-builder');
 

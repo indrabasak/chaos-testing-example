@@ -18,35 +18,41 @@ const helper = new ExperimentHelper(
 /// ////////////////////////////////////////////////////////////////////////////////
 // Scenario Outline: test resiliency by injecting chaos to all lambdas in a region
 /// ////////////////////////////////////////////////////////////////////////////////
-Given('localstack setup is up and running for testing api gateway chaos', async () => {
-  console.log('Checking if localstack is up');
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+Given(
+  'localstack setup is up and running for testing api gateway chaos',
+  async () => {
+    console.log('Checking if localstack is up');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
 
-  const response = await RestHelper.get(
-    `${process.env.LOCALSTACK_URL}`,
-    config
-  );
-  assert.equal(response.status, 200);
-});
+    const response = await RestHelper.get(
+      `${process.env.LOCALSTACK_URL}`,
+      config
+    );
+    assert.equal(response.status, 200);
+  }
+);
 
-When('check api gateway by sending a request to {} gets a response code of {int}', async (path, code) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+When(
+  'check api gateway by sending a request to {} gets a response code of {int}',
+  async (path, code) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
 
-  const response = await RestHelper.get(
-    `${process.env.BASE_URL}${path}`,
-    config
-  );
-  assert.equal(response.status, code);
-  console.log('END - health endpoint response successful');
-});
+    const response = await RestHelper.get(
+      `${process.env.BASE_URL}${path}`,
+      config
+    );
+    assert.equal(response.status, code);
+    console.log('END - health endpoint response successful');
+  }
+);
 
 When('I inject api gateway fault', async () => {
   console.log('1 ------------------------');
