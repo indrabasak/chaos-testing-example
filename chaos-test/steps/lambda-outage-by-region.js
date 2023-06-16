@@ -8,7 +8,9 @@
 const {
   FisClient,
   CreateExperimentTemplateCommand,
-  StartExperimentCommand, StopExperimentCommand, DeleteExperimentTemplateCommand
+  StartExperimentCommand,
+  StopExperimentCommand,
+  DeleteExperimentTemplateCommand
 } = require('@aws-sdk/client-fis');
 const { Given, Then, When, After } = require('@cucumber/cucumber');
 const assert = require('assert').strict;
@@ -57,7 +59,7 @@ When('request to {} gets a response code of {int}', async (path, code) => {
   console.log('END - health endpoint response successful');
 });
 
-When('I inject lambda outage by region fault', async () => {
+When('I inject fault', async () => {
   console.log('1 ------------------------');
 
   try {
@@ -78,6 +80,26 @@ When('I inject lambda outage by region fault', async () => {
     console.log(e);
   }
 });
+
+Then(
+  'send a GET request to {} and I should get a response code of {int}',
+  { timeout: 50 * 1000 },
+  async (path, code) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const response = await RestHelper.get(
+      `${process.env.BASE_URL}${path}`,
+      config
+    );
+
+    assert.equal(response.status, code);
+    console.log(`END - ${path} endpoint response successful`);
+  }
+);
 
 Then(
   'resend a GET request to {} and I should get a response code of {int}',
@@ -104,13 +126,15 @@ After(async () => {
   console.log(this.startResponse);
 
   if (this.experimentId) {
-    const stopCmd = new StopExperimentCommand({id: this.experimentId});
+    const stopCmd = new StopExperimentCommand({ id: this.experimentId });
     const stopRsp = await client.send(stopCmd);
     console.log(stopRsp);
   }
 
   if (this.experimentTemplateId) {
-    const deleteCmd = new DeleteExperimentTemplateCommand({id: this.experimentTemplateId});
+    const deleteCmd = new DeleteExperimentTemplateCommand({
+      id: this.experimentTemplateId
+    });
     const deleteRsp = await client.send(deleteCmd);
     console.log(deleteRsp);
   }
