@@ -6,7 +6,7 @@ TARGET_ENVIRONMENT="sbx"
 BUCKET_NAME="sbx-chaos-testing-example-state-us-west-2"
 
 usage() {
-    echo "<deploy|destroy|test>"
+    echo "<deploy|destroy|localdeploy|localdestroy>"
 }
 
 terraformDeploy() {
@@ -69,7 +69,7 @@ startLocalstack() {
 }
 
 terraformDeployLocal() {
-    echo "terraformDeploy - 1"
+    echo "terraformDeployLocal - 1"
     export TF_LOG="DEBUG"
 
     tflocal init
@@ -97,10 +97,28 @@ terraformDeployLocal() {
     fi
 }
 
+terraformDestroyLocal() {
+  echo "terraformDestroyLocal - started"
+  tflocal init
+  bucketImportStatus=$(tflocal import -var "key=${BASE_NAME}/terraform.tfstate" -var-file=./environments/${TARGET_REGION}/${TARGET_ENVIRONMENT}.tfvars aws_s3_bucket_public_access_block.terraform_state ${BUCKET_NAME})
+  echo "1 ------------------"
+  echo $bucketImportStatus
+  bucketPublicAccessBlockImportStatus=$(tflocal import -var "key=${BASE_NAME}/terraform.tfstate" -var-file=./environments/${TARGET_REGION}/${TARGET_ENVIRONMENT}.tfvars aws_s3_bucket_public_access_block.terraform_state ${BUCKET_NAME})
+  echo "2 ------------------"
+  tflocal destroy -auto-approve -lock=true -var "key=${BASE_NAME}/terraform.tfstate" -var-file=./environments/${TARGET_REGION}/${TARGET_ENVIRONMENT}.tfvars
+  echo "terraformDestroyLocal - ended"
+}
+
 serverlessDeployLocal() {
   echo "serverlessDeployLocal - started"
   sls deploy --stage local --region ${TARGET_REGION}
   echo "serverlessDeployLocal - completed"
+}
+
+serverlessDestroyLocal() {
+  echo "serverlessDestroyLocal - started"
+  sls remove --stage  local --region ${TARGET_REGION}
+  echo "serverlessDestroyLocal - completed"
 }
 
 if [ "$#" -ne 1 ]; then
@@ -123,15 +141,21 @@ elif [ "$1" = "destroy" ]; then
     serverlessDestroy
     terraformDestroy
     echo "destruction completed"
-elif [ "$1" = "test" ]; then
-    echo "test started"
+elif [ "$1" = "localdeploy" ]; then
+    echo "local deploy started"
     startLocalstack
     terraformDeployLocal
     serverlessDeployLocal
-    echo "test completed"
+    echo "local deploy completed"
+elif [ "$1" = "localdestroy" ]; then
+    echo "local destroy started"
+    serverlessDestroyLocal
+    terraformDestroyLocal
+    echo "local destroy completed"
 else
     echo "Incorrect arguments passed"
     usage
 fi
 
 exit
+
