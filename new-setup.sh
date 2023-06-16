@@ -4,9 +4,13 @@ BASE_NAME="chaos-testing-example"
 TARGET_REGION="us-west-2"
 TARGET_ENVIRONMENT="sbx"
 BUCKET_NAME="sbx-chaos-testing-example-state-us-west-2"
+LOCALSTACK_HOSTNAME="localhost"
+EDGE_PORT=4566
+#LOCALSTACK_HOSTNAME="http://internal-mock-cluster-ue1-lb-1600049175.us-east-1.elb.amazonaws.com/mock-services-http/localstack"
+#EDGE_PORT=80
 
 usage() {
-    echo "<deploy|destroy|localdeploy|localdestroy>"
+    echo "<deploy|destroy|deploylocal|destroylocal>"
 }
 
 terraformDeploy() {
@@ -60,12 +64,15 @@ serverlessDestroy() {
   echo "serverlessDestroy - completed"
 }
 
-startLocalstack() {
+initLocalstack() {
 #  dockerStatus=$(docker-compose up)
   echo "1 -------------"
-  echo ${dockerStatus}
+  export LOCALSTACK_HOSTNAME="${LOCALSTACK_HOSTNAME}"
+  echo $LOCALSTACK_HOSTNAME
+  export EDGE_PORT="${EDGE_PORT}"
+  echo $EDGE_PORT
   echo "2 -------------"
-  localstack start
+#  localstack start
 }
 
 terraformDeployLocal() {
@@ -141,14 +148,15 @@ elif [ "$1" = "destroy" ]; then
     serverlessDestroy
     terraformDestroy
     echo "destruction completed"
-elif [ "$1" = "localdeploy" ]; then
+elif [ "$1" = "deploylocal" ]; then
     echo "local deploy started"
-    startLocalstack
+    initLocalstack
     terraformDeployLocal
     serverlessDeployLocal
     echo "local deploy completed"
-elif [ "$1" = "localdestroy" ]; then
+elif [ "$1" = "destroylocal" ]; then
     echo "local destroy started"
+    initLocalstack
     serverlessDestroyLocal
     terraformDestroyLocal
     echo "local destroy completed"
