@@ -17,6 +17,18 @@ custom:
         Value: ${opt:stage, 'sbx'}
       - Key: 'adsk:moniker'
         Value: ${self:custom.config.moniker}
+  customDomains:
+    - rest:
+        domainName: ${self:custom.baseAppName}.${self:custom.config.dnsName}
+        certificateName: ${self:custom.baseAppName}.${self:custom.config.dnsName}
+        endpointType: 'regional'
+        hostedZoneId: ${self:custom.config.hostedZone}
+        autoDomain: true
+        hostedZonePrivate: false
+        route53Params:
+          routingPolicy: weighted
+          weight: ${self:custom.config.route53Weight}
+          setIdentifier: ${self:custom.baseAppName}-${self:provider.region}
   localstack:
     stages:
       - local
@@ -80,4 +92,5 @@ resources:
 
 plugins:
   - serverless-deployment-bucket
+  - serverless-domain-manager
   - serverless-localstack
