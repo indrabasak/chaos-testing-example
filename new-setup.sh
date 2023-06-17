@@ -6,7 +6,7 @@ TARGET_ENVIRONMENT="sbx"
 BUCKET_NAME="sbx-chaos-testing-example-state-us-west-2"
 LOCALSTACK_HOSTNAME="localhost"
 EDGE_PORT=4566
-#LOCALSTACK_HOSTNAME="http://internal-mock-cluster-ue1-lb-1600049175.us-east-1.elb.amazonaws.com/mock-services-http/localstack"
+#LOCALSTACK_HOSTNAME="internal-mock-cluster-ue1-lb-1600049175.us-east-1.elb.amazonaws.com/mock-services-http/localstack"
 #EDGE_PORT=80
 
 usage() {
