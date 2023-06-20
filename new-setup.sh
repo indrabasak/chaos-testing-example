@@ -4,13 +4,18 @@ BASE_NAME="chaos-testing-example"
 TARGET_REGION="us-west-2"
 TARGET_ENVIRONMENT="sbx"
 BUCKET_NAME="sbx-chaos-testing-example-state-us-west-2"
+
 LOCALSTACK_HOSTNAME="localhost"
 EDGE_PORT=4566
 #LOCALSTACK_HOSTNAME="internal-mock-cluster-ue1-lb-1600049175.us-east-1.elb.amazonaws.com/mock-services-http/localstack"
 #EDGE_PORT=80
+REST_API_NAME="api-gateway-chaos-example"
+LS_DOMAIN_NAME="chaos-example.demo.com"
+LS_HOSTED_ZONE_ID=''
+LS_CERT_ARN=''
 
 usage() {
-    echo "<deploy|destroy|deploylocal|destroylocal>"
+    echo "<deploy|destroy|deploylocal|destroylocal|hello>"
 }
 
 terraformDeploy() {
@@ -65,14 +70,12 @@ serverlessDestroy() {
 }
 
 initLocalstack() {
-#  dockerStatus=$(docker-compose up)
   echo "1 -------------"
   export LOCALSTACK_HOSTNAME="${LOCALSTACK_HOSTNAME}"
   echo $LOCALSTACK_HOSTNAME
   export EDGE_PORT="${EDGE_PORT}"
   echo $EDGE_PORT
   echo "2 -------------"
-#  localstack start
 }
 
 terraformDeployLocal() {
@@ -116,6 +119,28 @@ terraformDestroyLocal() {
   echo "terraformDestroyLocal - ended"
 }
 
+createLocalHostedZone() {
+  echo "Route53: Creating domain: $LS_DOMAIN_NAME"
+  rspDomainName=$(awslocal route53 create-hosted-zone --name $LS_DOMAIN_NAME --caller-reference r53-hz-$LS_DOMAIN_NAME --hosted-zone-config Comment="project:$LS_DOMAIN_NAME" --output json)
+  echo "response while creating custom domain: $rspDomainName"
+  LS_HOSTED_ZONE_ID=$(echo $rspDomainName | jq .HostedZone.Id | sed -r 's/"\/hostedzone\/(.*)"/\1/g')
+  echo "hosted zone id is $LS_HOSTED_ZONE_ID"
+  node ./converter.js $LS_HOSTED_ZONE_ID
+}
+
+createLocalCertificate() {
+  echo "ACM: Creating Certificate"
+  rspAcm=$(awslocal acm request-certificate --region $TARGET_REGION --domain-name $LS_DOMAIN_NAME --validation-method DNS --subject-alternative-names *.$LS_DOMAIN_NAME --tags Key=project,Value=$LS_DOMAIN_NAME --output json)
+  LS_CERT_ARN=$(echo $rspAcm | jq -r .CertificateArn)
+  echo "Cert ARN is $LS_CERT_ARN"
+}
+
+createLocalCustomDomain() {
+  echo "API Gateway: Creating Custom Domain"
+  rspApiGty=$(awslocal apigateway create-domain-name --region $TARGET_REGION --domain-name $LS_DOMAIN_NAME --regional-certificate-arn $LS_CERT_ARN --endpoint-configuration types=REGIONAL)
+  echo "Response form Api Gateway is $rspApiGty"
+}
+
 serverlessDeployLocal() {
   echo "serverlessDeployLocal - started"
   sls deploy --stage local --region ${TARGET_REGION}
@@ -151,7 +176,10 @@ elif [ "$1" = "destroy" ]; then
 elif [ "$1" = "deploylocal" ]; then
     echo "local deploy started"
     initLocalstack
+    createLocalHostedZone
+    createLocalCertificate
     terraformDeployLocal
+#    createLocalCustomDomain
     serverlessDeployLocal
     echo "local deploy completed"
 elif [ "$1" = "destroylocal" ]; then
@@ -160,6 +188,8 @@ elif [ "$1" = "destroylocal" ]; then
     serverlessDestroyLocal
     terraformDestroyLocal
     echo "local destroy completed"
+elif [ "$1" = "hello" ]; then
+    node ./converter.js hello
 else
     echo "Incorrect arguments passed"
     usage

@@ -61,7 +61,7 @@ functions:
           - src/common/**
           - src/health/**
       memorySize: 512
-      timeout: 300
+      timeout: 30
       reservedConcurrency: ${self:custom.config.lambda-health-reservedConcurrency}
       events:
         - http:
@@ -78,7 +78,7 @@ functions:
           - src/common/**
           - src/hello/**
       memorySize: 512
-      timeout: 300
+      timeout: 30
       reservedConcurrency: ${self:custom.config.lambda-hello-reservedConcurrency}
       events:
         - http:
