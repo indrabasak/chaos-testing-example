@@ -1,5 +1,10 @@
 ---
 moniker: 123456-C-UE1
 logLevel: debug
+#dnsName: indra-demo.autodesk.com
+#hostedZone: Z02302141283ODLADHAGN
+dnsName: dpeservices-sbx.autodesk.com
+hostedZone: Z01263541JHLU5HSJ1WH1
+route53Weight: 0
 lambda-health-reservedConcurrency: 5
 lambda-hello-reservedConcurrency: 5

@@ -22,7 +22,11 @@ class ExperimentHelper {
 
     this.client = new FisClient({
       endpoint: this.endpoint,
-      region: this.region
+      region: this.region,
+      credentials: {
+        accessKeyId: 'test',
+        secretAccessKey: 'test'
+      }
     });
   }
 

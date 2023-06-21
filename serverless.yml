@@ -17,10 +17,24 @@ custom:
         Value: ${opt:stage, 'sbx'}
       - Key: 'adsk:moniker'
         Value: ${self:custom.config.moniker}
+#  customDomains:
+#    - rest:
+#        domainName: ${self:custom.baseAppName}.${self:custom.config.dnsName}
+#        certificateName: ${self:custom.baseAppName}.${self:custom.config.dnsName}
+#        endpointType: 'regional'
+#        hostedZoneId: ${self:custom.config.hostedZone}
+#        autoDomain: true
+#        hostedZonePrivate: false
+#        route53Params:
+#          routingPolicy: weighted
+#          weight: ${self:custom.config.route53Weight}
+#          setIdentifier: ${self:custom.baseAppName}-${self:provider.region}
   localstack:
     stages:
       - local
     debug: true
+    endpoints:
+      APIGateway: http://localhost:4566
 
 provider:
   name: aws
@@ -49,7 +63,7 @@ functions:
           - src/common/**
           - src/health/**
       memorySize: 512
-      timeout: 300
+      timeout: 30
       reservedConcurrency: ${self:custom.config.lambda-health-reservedConcurrency}
       events:
         - http:
@@ -66,7 +80,7 @@ functions:
           - src/common/**
           - src/hello/**
       memorySize: 512
-      timeout: 300
+      timeout: 30
       reservedConcurrency: ${self:custom.config.lambda-hello-reservedConcurrency}
       events:
         - http:
@@ -79,5 +93,8 @@ resources:
   - ${file(resources/role-hello-lambda.yml)}
 
 plugins:
-  - serverless-deployment-bucket
   - serverless-localstack
+  - serverless-deployment-bucket
+#  - serverless-domain-manager
+
+

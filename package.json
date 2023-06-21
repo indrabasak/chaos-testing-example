@@ -7,9 +7,9 @@
   "author": "indra.basak1@gmail.com",
   "license": "MIT",
   "scripts": {
-    "test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/  --parallel 1; node chaos-test/template/report.js",
-    "apigateway-test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/features/ -r chaos-test/steps/ --tags '@apigateway-outage-by-region'; node chaos-test/template/report.js",
-    "report": "node chaos-test/template/report.js",
+    "test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/src/features/ -r chaos-test/src/steps/  --parallel 1; node chaos-test/src/template/report.js",
+    "apigateway-test": "./node_modules/.bin/cucumber-js -f json:cucumber.json chaos-test/src/features/ -r chaos-test/src/steps/ --tags '@apigateway-outage-by-region'; node chaos-test/src/template/report.js",
+    "report": "node chaos-test/src/template/report.js",
     "lint": "./node_modules/.bin/eslint ./src ./*.js -f table"
   },
   "devDependencies": {
@@ -29,14 +29,16 @@
   "dependencies": {
     "@aws-sdk/client-fis": "^3.352.0",
     "@cucumber/cucumber": "^9.1.2",
-    "aws-sdk": "^2.1397.0",
+    "aws-sdk": "^2.1400.0",
     "axios": "^1.4.0",
     "cucumber-html-reporter": "^7.1.0",
     "dotenv-flow": "^3.2.0",
     "fs": "^0.0.1-security",
     "lambda-api": "^0.12.0",
+    "nunjucks": "^3.2.4",
     "qs": "^6.11.2",
     "serverless-deployment-bucket": "^1.6.0",
+    "serverless-domain-manager": "^7.0.4",
     "serverless-localstack": "^1.1.1",
     "uuid": "^9.0.0",
     "winston": "^3.8.2"
