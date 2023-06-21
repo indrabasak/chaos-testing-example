@@ -16,7 +16,7 @@ LS_HOSTED_ZONE_ID=''
 LS_CERT_ARN=''
 
 usage() {
-    echo "<deploy|destroy|deploylocal|destroylocal|hello>"
+    echo "<deploy|destroy|deploylocal|destroylocal|hello|test>"
 }
 
 terraformDeploy() {
@@ -188,6 +188,8 @@ elif [ "$1" = "destroylocal" ]; then
     serverlessDestroyLocal
     terraformDestroyLocal
     echo "local destroy completed"
+elif [ "$1" = "test" ]; then
+    yarn test
 elif [ "$1" = "hello" ]; then
     node ./converter.js hello
 else

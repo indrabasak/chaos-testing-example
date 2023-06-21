@@ -1,8 +1,8 @@
 /**
- * Cucumber steps for chaos testing when lambdas are out in a region
+ * Cucumber steps for chaos testing when API Gateway is down in a region
  *
  * @author Indra Basak
- * @since Jun 14, 2023
+ * @since Jun 15, 2023
  */
 const { Given, Then, When, After } = require('@cucumber/cucumber');
 const assert = require('assert').strict;
@@ -19,7 +19,7 @@ const helper = new ExperimentHelper(
 // Scenario Outline: test resiliency by injecting chaos to all lambdas in a region
 /// ////////////////////////////////////////////////////////////////////////////////
 Given(
-  'localstack setup is up and running for testing lambdas chaos in a region',
+  'localstack setup is up and running for testing api gateway chaos',
   async () => {
     console.log('Checking if localstack is up');
     const config = {
@@ -37,16 +37,17 @@ Given(
 );
 
 When(
-  'check lambda by sending a request to {} gets a response code of {int}',
+  'check api gateway by sending a request to {} gets a response code of {int}',
   async (path, code) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Host: `${process.env.CUSTOM_DOMAIN}`
       }
     };
 
     const response = await RestHelper.get(
-      `${process.env.BASE_URL}${path}`,
+      `${process.env.LOCALSTACK_URL}${path}`,
       config
     );
     assert.equal(response.status, code);
@@ -54,48 +55,29 @@ When(
   }
 );
 
-When('I inject lambda fault', async () => {
+When('I inject api gateway fault', async () => {
   console.log('1 ------------------------');
-  await helper.startExperiment('lambda');
+  await helper.startExperiment('apigateway');
 });
 
 Then(
-  'I send a GET request to {} and I should get a response code of {int}',
+  'check api gateway by sending a GET request to {} and I should get a response code of {int}',
   { timeout: 50 * 1000 },
   async (path, code) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Host: `${process.env.CUSTOM_DOMAIN}`
       }
     };
 
     const response = await RestHelper.get(
-      `${process.env.BASE_URL}${path}`,
+      `${process.env.LOCALSTACK_URL}${path}`,
       config
     );
 
     assert.equal(response.status, code);
     console.log(`END - ${path} endpoint response successful`);
-  }
-);
-
-Then(
-  'check lambda by resending a GET request to {} and I should get a response code of {int}',
-  { timeout: 50 * 1000 },
-  async (path, code) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-
-    const response = await RestHelper.get(
-      `${process.env.BASE_URL}${path}`,
-      config
-    );
-
-    assert.equal(response.status, code);
-    console.log('END - health endpoint response successful');
   }
 );
 

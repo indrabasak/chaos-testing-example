@@ -96,5 +96,5 @@ plugins:
   - serverless-localstack
   - serverless-deployment-bucket
 #  - serverless-domain-manager
-#  - custom-serverless-domain-manager
+
 
