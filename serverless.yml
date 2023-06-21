@@ -17,22 +17,24 @@ custom:
         Value: ${opt:stage, 'sbx'}
       - Key: 'adsk:moniker'
         Value: ${self:custom.config.moniker}
-  customDomains:
-    - rest:
-        domainName: ${self:custom.baseAppName}.${self:custom.config.dnsName}
-        certificateName: ${self:custom.baseAppName}.${self:custom.config.dnsName}
-        endpointType: 'regional'
-        hostedZoneId: ${self:custom.config.hostedZone}
-        autoDomain: true
-        hostedZonePrivate: false
-        route53Params:
-          routingPolicy: weighted
-          weight: ${self:custom.config.route53Weight}
-          setIdentifier: ${self:custom.baseAppName}-${self:provider.region}
+#  customDomains:
+#    - rest:
+#        domainName: ${self:custom.baseAppName}.${self:custom.config.dnsName}
+#        certificateName: ${self:custom.baseAppName}.${self:custom.config.dnsName}
+#        endpointType: 'regional'
+#        hostedZoneId: ${self:custom.config.hostedZone}
+#        autoDomain: true
+#        hostedZonePrivate: false
+#        route53Params:
+#          routingPolicy: weighted
+#          weight: ${self:custom.config.route53Weight}
+#          setIdentifier: ${self:custom.baseAppName}-${self:provider.region}
   localstack:
     stages:
       - local
     debug: true
+    endpoints:
+      APIGateway: http://localhost:4566
 
 provider:
   name: aws
@@ -91,6 +93,8 @@ resources:
   - ${file(resources/role-hello-lambda.yml)}
 
 plugins:
-  - serverless-deployment-bucket
-  - serverless-domain-manager
   - serverless-localstack
+  - serverless-deployment-bucket
+#  - serverless-domain-manager
+#  - custom-serverless-domain-manager
+

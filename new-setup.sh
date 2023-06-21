@@ -10,7 +10,8 @@ EDGE_PORT=4566
 #LOCALSTACK_HOSTNAME="internal-mock-cluster-ue1-lb-1600049175.us-east-1.elb.amazonaws.com/mock-services-http/localstack"
 #EDGE_PORT=80
 REST_API_NAME="api-gateway-chaos-example"
-LS_DOMAIN_NAME="chaos-example.demo.com"
+#LS_DOMAIN_NAME="chaos-example.demo.com"
+LS_DOMAIN_NAME="demo.com"
 LS_HOSTED_ZONE_ID=''
 LS_CERT_ARN=''
 
@@ -177,9 +178,8 @@ elif [ "$1" = "deploylocal" ]; then
     echo "local deploy started"
     initLocalstack
     createLocalHostedZone
-    createLocalCertificate
+#    createLocalCertificate
     terraformDeployLocal
-#    createLocalCustomDomain
     serverlessDeployLocal
     echo "local deploy completed"
 elif [ "$1" = "destroylocal" ]; then
