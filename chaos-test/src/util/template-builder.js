@@ -14,7 +14,7 @@ class TemplateBuilder {
           parameters: {
             service: serviceName,
             percentage: '100',
-            exception: 'exception, terrible error in lambda',
+            exception: `exception, error in ${serviceName}`,
             errorCode: '500',
             region: regionName
           }
