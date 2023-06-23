@@ -138,3 +138,6 @@ dist
 /volume/
 /test-reports/cucumber_report.html
 /cucumber.json
+/docker-compose.yml.bak
+/notes.txt
+/Dockerfile
