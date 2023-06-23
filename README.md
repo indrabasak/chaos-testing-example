@@ -34,3 +34,19 @@ infrastructure code. While both the lambdas along with their integrations with t
 by the [Serverless framework]((https://www.serverless.com/).
 
 ![](./img/chaos-testing-example.svg)
+
+## Prerequisites
+
+Please ensure your computer is ready before you can start playing around with the sample applications. The following tools need to be installed on your computer:
+
+- Node.js and NPM
+- yarn
+- Terraform
+- Serverless
+- jq
+- docker
+- python
+- pip
+- localstack
+- awscli-local
+- terraform-local
