@@ -67,9 +67,10 @@ yarn install
 If everything goes well, the project should successfully download all dependencies.
 
 ### Local Stack API Key
-Before deploying the sample application in LocalStack, please ensure you have a LocalStack API key since we'll be using 
-the Pro version. Once you have the API Key, export the API key as LocalStack expects the key to be present in the 
-environment variable `LOCALSTACK_API_KEY`.
+Before deploying the sample application in LocalStack, please ensure you have a 
+[LocalStack API Key](https://docs.localstack.cloud/getting-started/api-key/) 
+since we'll be using the Pro version. Once you have the API Key, export the API Key 
+as LocalStack expects the key to be present in the environment variable `LOCALSTACK_API_KEY`.
 
 ```
 export LOCALSTACK_API_KEY=<YOUR_API_KEY>
@@ -92,3 +93,49 @@ localstack_main  | 2023-06-23T00:28:44.974  INFO --- [-functhread3] hypercorn.er
 localstack_main  | 2023-06-23T00:28:45.095  INFO --- [  MainThread] localstack.utils.bootstrap : Execution of "start_runtime_components" took 1206.09ms
 localstack_main  | Ready.
 ```
+
+### Deploy Application
+To deploy the sample application, execute the following command:
+
+```
+./new-setup.sh deploylocal
+```
+
+If the application starts up successfully, you should expect the messages shown below:
+
+```
+Using custom endpoint for S3: http://localhost:4566
+Skipping reconfiguring of endpoints (already reconfigured)
+
+✔ Service deployed to stack chaos-testing-example-local (56s)
+
+endpoint: http://localhost:4566/restapis/offhkmiqdi/local/_user_request_
+functions:
+  health: chaos-testing-example-health (49 MB)
+  hello: chaos-testing-example-hello (49 MB)
+
+3 deprecations found: run 'serverless doctor' for more details
+serverlessDeployLocal - completed
+local deploy completed
+```
+
+## Testing
+The sample application has a couple of failure scenarios:
+
+- A scenario for application behavior when AWS API Gateway goes down in a region.
+- A scenario for application behavior when AWS Lambda goes down in a region.
+
+To run different chaos test scenarios, execute the following command:
+
+```
+./new-setup.sh test
+```
+
+This should run all the tests and if everything goes well, you show expect the following message:
+
+```
+🚀 Cucumber HTML report test-reports/cucumber_report.html generated successfully 👍
+✨  Done in 20.08s.
+```
+
+The test should also generate a report showing the test results.
