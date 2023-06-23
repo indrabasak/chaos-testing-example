@@ -29,15 +29,15 @@ acts as an entry point to a REST API. This REST API has the following endpoints:
 
 The sample application also has a custom domain (`chaos-example.demo.com`) for easier access to the REST endpoints.
 
-The API Gateway along with the mock integration, custom domain, and ACM certificate is created using [Terraform](https://www.terraform.io/) 
-infrastructure code. While both the lambdas along with their integrations with the aforementioned API Gateway are managed 
-by the [Serverless framework]((https://www.serverless.com/).
+The API Gateway along with the mock integration, custom domain, and ACM certificate is created 
+using [Terraform](https://www.terraform.io/) infrastructure code. While both the lambdas along with their 
+integrations with the aforementioned API Gateway are managed by the [Serverless framework]((https://www.serverless.com/).
 
 ![](./img/chaos-testing-example.svg)
 
 ## Prerequisites
-
-Please ensure your computer is ready before you can start playing around with the sample applications. The following tools need to be installed on your computer:
+Please ensure your computer is ready before you can start playing around with the sample applications. The following tools need 
+to be installed on your computer:
 
 - Node.js and NPM
 - yarn
@@ -50,3 +50,45 @@ Please ensure your computer is ready before you can start playing around with th
 - localstack
 - awscli-local
 - terraform-local
+
+> **Note**
+> We'll be using Pro version of LocalStack
+
+## Deploy Sample Application in LocalStack
+
+### Build Application
+Once you have checked out the sample application from the GitHub repository, please make sure you can build the 
+application by executing the following command:
+
+```
+yarn install
+```
+
+If everything goes well, the project should successfully download all dependencies.
+
+### Local Stack API Key
+Before deploying the sample application in LocalStack, please ensure you have a LocalStack API key since we'll be using 
+the Pro version. Once you have the API Key, export the API key as LocalStack expects the key to be present in the 
+environment variable `LOCALSTACK_API_KEY`.
+
+```
+export LOCALSTACK_API_KEY=<YOUR_API_KEY>
+```
+
+### Start LocalStack
+We'll be managing LocalStack manually by using Docker Compose. You can run the container by executing the following command:
+
+```
+docker-compose up
+```
+
+If the Docker container starts up successfully, you should be expecting similar messages shown below:
+
+```
+localstack_main  | 2023-06-23T00:28:44.974  INFO --- [-functhread6] hypercorn.error            : Running on https://0.0.0.0:443 (CTRL + C to quit)
+localstack_main  | 2023-06-23T00:28:44.974  INFO --- [-functhread6] hypercorn.error            : Running on https://0.0.0.0:443 (CTRL + C to quit)
+localstack_main  | 2023-06-23T00:28:44.974  INFO --- [-functhread3] hypercorn.error            : Running on https://0.0.0.0:4566 (CTRL + C to quit)
+localstack_main  | 2023-06-23T00:28:44.974  INFO --- [-functhread3] hypercorn.error            : Running on https://0.0.0.0:4566 (CTRL + C to quit)
+localstack_main  | 2023-06-23T00:28:45.095  INFO --- [  MainThread] localstack.utils.bootstrap : Execution of "start_runtime_components" took 1206.09ms
+localstack_main  | Ready.
+```
