@@ -31,8 +31,8 @@ acts as an entry point to a REST API. This REST API has the following endpoints:
 The sample application also has a custom domain (`chaos-example.demo.com`) for easier access to the REST endpoints.
 
 The API Gateway along with the mock integration, custom domain, and ACM certificate is created 
-using [Terraform](https://www.terraform.io/) infrastructure code. While both the lambdas along with their 
-integrations with the aforementioned API Gateway are managed by the [Serverless framework]((https://www.serverless.com/).
+using [Terraform](https://www.terraform.io/) infrastructure code. While both the lambdas along with their 
+integrations with the aforementioned API Gateway are managed by the [Serverless framework]((https://www.serverless.com/).
 
 ![](./img/chaos-testing-example.svg)
 
@@ -140,3 +140,4 @@ This should run all the tests and if everything goes well, you show expect the f
 ```
 
 The test should also generate a report showing the test results.
+![](./img/chaos-test-report.png)
