@@ -1,9 +1,10 @@
 Chaos Testing Example
 ========================
 Chaos testing is a way of measuring the resiliency of an application by simulating failures in a given environment. 
-It is to identify any potential unplanned downtimes before it actually happens in reality.
+It is to identify any potential unplanned downtimes before it happens in reality.
 
-AWS provides Fault Injection Simulator (FIS) to measure an application's readiness. However, AWS FIS currently supports 
+AWS provides [Fault Injection Simulator (FIS)](https://aws.amazon.com/fis/) to measure 
+an application's readiness. However, AWS FIS currently supports 
 managed services like [Amazon Elastic Compute Cloud (Amazon EC2)](https://aws.amazon.com/ec2/), 
 [Amazon Elastic Container Service (Amazon ECS)](https://aws.amazon.com/ecs/), 
 [Amazon Elastic Kubernetes Service (EKS)]()https://aws.amazon.com/eks/, and 
