@@ -24,17 +24,17 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      run: yarn install --frozen-lockfile
 
     - name: Install awslocal
-        run: pip install localstack awscli-local
+      run: pip install localstack awscli-local
 
     # Install the latest version of Terraform CLI an
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
     - name: Install tflocal
-        run: pip install terraform-local
+      run: pip install terraform-local
 
     - name: serverless deploy
       uses: serverless/github-action@v3.2
