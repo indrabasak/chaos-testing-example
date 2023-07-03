@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'Chaos Test'
 
 on:
   workflow_dispatch:
