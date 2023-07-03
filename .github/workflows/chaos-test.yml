@@ -7,6 +7,9 @@ jobs:
   test:
     name: 'Chaos Test'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+      node-version: [18.x]
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -18,7 +21,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Setup Node.js
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
@@ -36,29 +39,14 @@ jobs:
     - name: Install tflocal
       run: pip install terraform-local
 
-    - name: serverless deploy
-      uses: serverless/github-action@v3.2
+#    - name: Install serverless
+#      uses: serverless/github-action@v3.2
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-#    - name: Setup Terraform
-#      uses: hashicorp/setup-terraform@v1
-#      with:
-#        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-#
-#    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-#    - name: Terraform Init
-#      run: terraform init
-#
-#    # Checks that all Terraform configuration files adhere to a canonical format
-#    - name: Terraform Format
-#      run: terraform fmt -check
-#
-#    # Generates an execution plan for Terraform
-#    - name: Terraform Plan
-#      run: terraform plan -input=false
-#
-#      # On push to "main", build or change infrastructure according to Terraform configuration files
-#      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-#    - name: Terraform Apply
-#      if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-#      run: terraform apply -auto-approve -input=false
+    - name: Start LocalStack
+      run: docker-compose up
+
+    - name: Run some Tests against LocalStack
+      run: |
+        awslocal s3 mb s3://test
+        awslocal s3 ls
+        echo "Test Execution complete!"
