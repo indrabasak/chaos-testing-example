@@ -42,10 +42,10 @@ jobs:
 #    - name: Install serverless
 #      uses: serverless/github-action@v3.2
 
-    - name: Start LocalStack
+    - name: Start LocalStack container
       env:
         LOCALSTACK_API_KEY: ${{ secrets.LOCALSTACK_API_KEY }}
-      run: docker-compose up
+      run: docker-compose -f "docker-compose.yml" up
 
     - name: Run some Tests against LocalStack
       run: |
