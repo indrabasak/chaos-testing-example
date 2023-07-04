@@ -45,7 +45,11 @@ jobs:
     - name: Start LocalStack container
       env:
         LOCALSTACK_API_KEY: ${{ secrets.LOCALSTACK_API_KEY }}
-      run: docker-compose -f "docker-compose.yml" up -d
+      run: |
+        docker-compose -f "docker-compose.yml" up -d
+        echo "Waiting for LocalStack startup..."  # Wait 30 seconds for the LocalStack container
+        localstack wait -t 30                     # to become ready before timing out
+        echo "Startup complete"
 
     - name: Run some Tests against LocalStack
       run: |
