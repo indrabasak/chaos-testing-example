@@ -45,7 +45,7 @@ jobs:
     - name: Start LocalStack container
       env:
         LOCALSTACK_API_KEY: ${{ secrets.LOCALSTACK_API_KEY }}
-      run: docker-compose -f "docker-compose.yml" up
+      run: docker-compose -f "docker-compose.yml" up -d
 
     - name: Run some Tests against LocalStack
       run: |
