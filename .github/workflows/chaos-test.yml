@@ -56,3 +56,9 @@ jobs:
         awslocal s3 mb s3://test
         awslocal s3 ls
         echo "Test Execution complete!"
+
+    - name: Deploy sample app in LocalStack
+      run: ./new-setup.sh deploylocal
+
+    - name: Run Chaos Test
+      run: yarn test
