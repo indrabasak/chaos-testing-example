@@ -58,8 +58,10 @@ jobs:
         echo "Test Execution complete!"
 
     - name: Deploy sample app in LocalStack
-      run: ./new-setup.sh deploylocal
       shell: bash
+      run: |
+        echo $SHELL
+        ./new-setup.sh deploylocal
 
     - name: Run Chaos Test
       run: yarn test
