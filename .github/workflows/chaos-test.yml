@@ -59,6 +59,7 @@ jobs:
 
     - name: Deploy sample app in LocalStack
       run: ./new-setup.sh deploylocal
+      shell: bash
 
     - name: Run Chaos Test
       run: yarn test
