@@ -4,11 +4,14 @@
  * @author Indra Basak
  * @since Jun 14, 2023
  */
-const { Given, Then, When, After } = require('@cucumber/cucumber');
+const { Given, Then, When, After, setDefaultTimeout  } = require('@cucumber/cucumber');
 const assert = require('assert').strict;
 require('dotenv-flow').config();
 const { ExperimentHelper } = require('../util/experiment-helper');
 const { RestHelper } = require('../util/rest-helper');
+
+const DEFAULT_TIMEOUT = 60000;
+setDefaultTimeout(DEFAULT_TIMEOUT);
 
 const helper = new ExperimentHelper(
   process.env.LOCALSTACK_URL,
