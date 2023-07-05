@@ -61,6 +61,7 @@ jobs:
       shell: bash
       run: |
         echo $SHELL
+        ln -s /bin/bash /usr/local/bin/bash
         ./new-setup.sh deploylocal
 
     - name: Run Chaos Test
