@@ -39,8 +39,8 @@ jobs:
     - name: Install tflocal
       run: pip install terraform-local
 
-#    - name: Install serverless
-#      uses: serverless/github-action@v3.2
+    - name: Install serverless
+      run: npm install serverless -g
 
     - name: Start LocalStack container
       env:
